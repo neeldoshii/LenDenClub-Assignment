@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
+import com.example.utils.Constants
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,9 +36,9 @@ class MenuFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        val restaurantId = arguments?.getString("restaurantId")
+        val restaurantId = arguments?.getInt(Constants.KEY_RESTAURANT_ID)
         println(restaurantId)
-        Toast.makeText(requireContext(), restaurantId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), restaurantId.toString(), Toast.LENGTH_SHORT).show()
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_menu, container, false)
     }

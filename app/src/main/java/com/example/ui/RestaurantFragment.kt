@@ -16,6 +16,7 @@ import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentRestaurantBinding
 import com.example.ui.adapter.RestaurantAdapter
 import com.example.ui.viewmodel.RestaurantViewModel
+import com.example.utils.Constants
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -43,7 +44,7 @@ class RestaurantFragment : Fragment() {
         binding.restaurantRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter = RestaurantAdapter {
             val bundle = Bundle().apply {
-                putString("restaurantId", it.toString()) // TODO : use const
+                putInt(Constants.KEY_RESTAURANT_ID, it)
             }
             findNavController().navigate(R.id.action_restaurantFragment_to_menuFragment, bundle)
         }
