@@ -1,6 +1,7 @@
 package com.example.di
 
 import com.example.data.network.APIService
+import com.example.data.repository.MenuRepository
 import com.example.data.repository.RestaurantRepository
 import dagger.Module
 import dagger.Provides
@@ -42,6 +43,12 @@ object AppModule {
     @Provides
     fun provideRestaurantRepository(apiService: APIService) : RestaurantRepository {
         return  RestaurantRepository(apiService)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMenuRepository(apiService: APIService) : MenuRepository {
+        return  MenuRepository(apiService)
     }
 //    private const val BASE_URL : String = "http://localhost:3000/"
     private const val BASE_URL : String = "http://10.0.2.2:3000/"

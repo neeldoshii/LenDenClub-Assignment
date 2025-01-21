@@ -15,7 +15,7 @@
             app:destination="@id/menuFragment">
         <argument
             android:name="restaurantId"
-            app:argType="string"/>
+            app:argType="integer"/>
         </action>
     </fragment>
     <fragment
@@ -25,6 +25,6 @@
         tools:layout="@layout/fragment_menu">
     <argument
         android:name="restaurantId"
-        app:argType="string" />
+        app:argType="integer" />
     </fragment>
 </navigation>
