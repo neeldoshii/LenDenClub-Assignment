@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -64,6 +66,40 @@ class RestaurantFragment : Fragment() {
                 }
             }
         }
+
+        binding.searchRestaurant.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            // We are not using this as we are performing search on every new character changed
+            // not on when submit
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    viewModel.performSearch(query = it)
+                }
+
+                return true
+            }
+
+        })
+
+
+        lifecycleScope.launch {
+            viewModel.filterText.collect { filteredList ->
+                adapter.submitList(filteredList)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.noResultsFound.collect { noResults ->
+                if (noResults) {
+                    // if nothing found from search then show a toast saying not found
+                    Toast.makeText(requireContext(), "No Result Found", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
         viewModel.getRestaurantList()
     }
 
