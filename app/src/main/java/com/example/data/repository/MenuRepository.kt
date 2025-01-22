@@ -1,18 +1,25 @@
 package com.example.data.repository
 
+import com.example.data.db.dao.MenuItemDao
 import com.example.data.model.MenuItem
 import com.example.data.model.Result
 import com.example.data.network.APIService
+import kotlinx.coroutines.flow.first
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class MenuRepository @Inject constructor(
     private val apiService: APIService,
+    private val menuItemDao: MenuItemDao,
     // DAO
 ){
     suspend fun getRestaurantsMenuResponse(restaurantId : Int) : Result<List<MenuItem>> {
         return try {
             val response = apiService.getRestaurantMenu(id = restaurantId)
+            response.menu.forEach { item ->
+                item.restaurantId = restaurantId // Set the restaurantId in the menu item
+            }
+            menuItemDao.insertMenuItems(response.menu)
             return Result.Success(response.menu)
         }
         catch (e : HttpException) {
@@ -24,7 +31,13 @@ class MenuRepository @Inject constructor(
             }
         }
         catch (e : Exception){
-            Result.Error(e.message.toString())
+            val cachedMenu = menuItemDao.getMenuItemsByRestaurantId(restaurantId).first()
+            if (cachedMenu.isEmpty()){
+                Result.Error("No cached Response found from server. Exception :" + e.message.toString())
+            } else {
+                Result.Success(cachedMenu)
+            }
+
         }
 
     }

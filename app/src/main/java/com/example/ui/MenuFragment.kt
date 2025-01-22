@@ -13,6 +13,7 @@ import com.example.myapplication.databinding.FragmentMenuBinding
 import com.example.ui.adapter.MenuAdapter
 import com.example.ui.viewmodel.MenuViewModel
 import com.example.utils.Constants
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -51,8 +52,7 @@ class MenuFragment : Fragment() {
                     }
 
                     is Result.Error -> {
-                        // TODO : Show a snackbar 
-                        println("")
+                        Snackbar.make(requireView(), response.message, Snackbar.LENGTH_SHORT).show()
                     }
 
                     else -> {}

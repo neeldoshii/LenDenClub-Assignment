@@ -2,6 +2,7 @@ package com.example.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.data.db.dao.MenuItemDao
 import com.example.data.db.dao.RestaurantDao
 import com.example.data.db.database.AppDatabase
 import com.example.data.network.APIService
@@ -60,6 +61,12 @@ object AppModule {
         return database.restaurantDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideMenuItemDao(database: AppDatabase): MenuItemDao {
+        return database.menuItemDao()
+    }
+
     @Singleton
     @Provides
     fun provideRestaurantRepository(apiService: APIService, restaurantDao: RestaurantDao) : RestaurantRepository {
@@ -68,8 +75,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMenuRepository(apiService: APIService) : MenuRepository {
-        return  MenuRepository(apiService)
+    fun provideMenuRepository(apiService: APIService, menuItemDao: MenuItemDao) : MenuRepository {
+        return  MenuRepository(apiService, menuItemDao)
     }
 //    private const val BASE_URL : String = "http://localhost:3000/"
     private const val BASE_URL : String = "http://10.0.2.2:3000/"
