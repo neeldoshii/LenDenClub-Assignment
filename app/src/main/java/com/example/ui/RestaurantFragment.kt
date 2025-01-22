@@ -17,6 +17,7 @@ import com.example.myapplication.databinding.FragmentRestaurantBinding
 import com.example.ui.adapter.RestaurantAdapter
 import com.example.ui.viewmodel.RestaurantViewModel
 import com.example.utils.Constants
+import com.google.android.material.snackbar.Snackbar
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -59,8 +60,7 @@ class RestaurantFragment : Fragment() {
                     }
 
                     is Result.Error -> {
-                        // TODO : show cached response from Room DB
-                        println("")
+                        Snackbar.make(requireView(), response.message, Snackbar.LENGTH_SHORT).show()
                     }
 
                     else -> {}

@@ -1,11 +1,16 @@
 package com.example.di
 
+import android.content.Context
+import androidx.room.Room
+import com.example.data.db.dao.RestaurantDao
+import com.example.data.db.database.AppDatabase
 import com.example.data.network.APIService
 import com.example.data.repository.MenuRepository
 import com.example.data.repository.RestaurantRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -39,10 +44,26 @@ object AppModule {
         return retrofit.create(APIService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideRestaurantDatabase(@ApplicationContext context: Context) : AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "restaurant-database"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRestaurantDao(database: AppDatabase): RestaurantDao {
+        return database.restaurantDao()
+    }
+
     @Singleton
     @Provides
-    fun provideRestaurantRepository(apiService: APIService) : RestaurantRepository {
-        return  RestaurantRepository(apiService)
+    fun provideRestaurantRepository(apiService: APIService, restaurantDao: RestaurantDao) : RestaurantRepository {
+        return  RestaurantRepository(apiService, restaurantDao)
     }
 
     @Singleton
