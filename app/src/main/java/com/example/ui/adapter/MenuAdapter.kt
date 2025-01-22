@@ -10,7 +10,9 @@ import com.bumptech.glide.Glide
 import com.example.data.model.MenuItem
 import com.example.myapplication.databinding.MenuItemBinding
 
-class MenuAdapter :
+class MenuAdapter(
+    private val addToCart: (MenuItem) -> Unit
+) :
     ListAdapter<MenuItem, MenuAdapter.MenuViewHolder>(MenuDiffCallback()) {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -44,6 +46,9 @@ class MenuAdapter :
             binding.menuNameTextView.text = menuItem.name
             binding.menuDescriptionTextView.text = menuItem.description
             binding.menuPriceTextView.text = "Rs : " + menuItem.price.toString()
+            binding.addToCartButton.setOnClickListener{
+                addToCart(menuItem)
+            }
         }
     }
 

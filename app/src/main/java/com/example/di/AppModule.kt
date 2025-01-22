@@ -2,10 +2,12 @@ package com.example.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.data.db.dao.CartItemDao
 import com.example.data.db.dao.MenuItemDao
 import com.example.data.db.dao.RestaurantDao
 import com.example.data.db.database.AppDatabase
 import com.example.data.network.APIService
+import com.example.data.repository.CartRepository
 import com.example.data.repository.MenuRepository
 import com.example.data.repository.RestaurantRepository
 import dagger.Module
@@ -67,6 +69,12 @@ object AppModule {
         return database.menuItemDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideCartItemDao(database: AppDatabase): CartItemDao {
+        return database.cartItemDao()
+    }
+
     @Singleton
     @Provides
     fun provideRestaurantRepository(apiService: APIService, restaurantDao: RestaurantDao) : RestaurantRepository {
@@ -75,8 +83,14 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMenuRepository(apiService: APIService, menuItemDao: MenuItemDao) : MenuRepository {
-        return  MenuRepository(apiService, menuItemDao)
+    fun provideMenuRepository(apiService: APIService, menuItemDao: MenuItemDao, cartItemDao: CartItemDao) : MenuRepository {
+        return  MenuRepository(apiService, menuItemDao, cartItemDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCartRepository(cartItemDao: CartItemDao) : CartRepository {
+        return  CartRepository(cartItemDao)
     }
 //    private const val BASE_URL : String = "http://localhost:3000/"
     private const val BASE_URL : String = "http://10.0.2.2:3000/"

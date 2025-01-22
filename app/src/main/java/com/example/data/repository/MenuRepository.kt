@@ -1,6 +1,8 @@
 package com.example.data.repository
 
+import com.example.data.db.dao.CartItemDao
 import com.example.data.db.dao.MenuItemDao
+import com.example.data.model.CartItem
 import com.example.data.model.MenuItem
 import com.example.data.model.Result
 import com.example.data.network.APIService
@@ -11,7 +13,7 @@ import javax.inject.Inject
 class MenuRepository @Inject constructor(
     private val apiService: APIService,
     private val menuItemDao: MenuItemDao,
-    // DAO
+    private val cartItemDao: CartItemDao
 ){
     suspend fun getRestaurantsMenuResponse(restaurantId : Int) : Result<List<MenuItem>> {
         return try {
@@ -40,5 +42,17 @@ class MenuRepository @Inject constructor(
 
         }
 
+    }
+
+    suspend fun addToCart(cartItem : CartItem){
+        val existingCartItem = cartItemDao.getCartItemByMenuId(cartItem.menuId)
+        if (existingCartItem != null) {
+            // If it exists, update the quantity
+            existingCartItem.quantity += 1
+            cartItemDao.update(existingCartItem)
+        } else {
+            // If it doesn't exist, insert as a new item
+            cartItemDao.insert(cartItem)
+        }
     }
 }
