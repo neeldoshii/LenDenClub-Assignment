@@ -4,6 +4,7 @@ import com.example.data.db.dao.RestaurantDao
 import com.example.data.model.RestaurantItem
 import com.example.data.model.Result
 import com.example.data.network.APIService
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class RestaurantRepository @Inject constructor(
@@ -28,7 +29,7 @@ class RestaurantRepository @Inject constructor(
         }
          */
         catch (e : Exception){
-            val cachedResponse = restaurantDao.getAllRestaurants()
+            val cachedResponse = restaurantDao.getAllRestaurants().first()
             if (cachedResponse.isEmpty()) {
                 Result.Error("No cached Response found from server. Exception :" + e.message.toString())
             }
