@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentCartBinding
 import com.example.ui.adapter.CartAdapter
 import com.example.ui.viewmodel.CartViewModel
@@ -54,6 +56,9 @@ class CartFragment : Fragment() {
             viewModel.totalAmount.collect{
                 binding.totalAmountTextView.text = "Total Amount : Rs $it" // TODO use string format
             }
+        }
+        binding.checkoutButton.setOnClickListener{
+            findNavController().navigate(R.id.action_cartFragment_to_checkoutFragment)
         }
     }
 
